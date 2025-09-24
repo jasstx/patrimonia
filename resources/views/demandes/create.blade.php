@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-    <form action="{{ route('demande.store') }}" method="POST" enctype="multipart/form-data" class="space-y-10" x-data="{ domaine: '' }">
+    <form action="{{ route('demande.store') }}" method="POST" enctype="multipart/form-data" class="space-y-10" x-data="{ domaine: '', typeDetenteur: '', sexe: '' }">
         @csrf
 
         {{-- IDENTIFICATION DU DETENTEUR --}}
@@ -25,27 +25,27 @@
             </div>
 
             {{-- Type de détenteur --}}
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" x-data="{}">
                 <label class="group relative cursor-pointer">
-                    <input type="radio" name="type_detenteur" value="individu" required class="peer sr-only">
+                    <input type="radio" name="type_detenteur" value="individu" required class="peer sr-only" x-model="typeDetenteur">
                     <div class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 group-hover:border-indigo-300 peer-checked:border-indigo-600 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 transition">
                         Individu
                     </div>
                 </label>
                 <label class="group relative cursor-pointer">
-                    <input type="radio" name="type_detenteur" value="famille" class="peer sr-only">
+                    <input type="radio" name="type_detenteur" value="famille" class="peer sr-only" x-model="typeDetenteur">
                     <div class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 group-hover:border-indigo-300 peer-checked:border-indigo-600 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 transition">
                         Famille
                     </div>
                 </label>
                 <label class="group relative cursor-pointer">
-                    <input type="radio" name="type_detenteur" value="communaute" class="peer sr-only">
+                    <input type="radio" name="type_detenteur" value="communaute" class="peer sr-only" x-model="typeDetenteur">
                     <div class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 group-hover:border-indigo-300 peer-checked:border-indigo-600 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 transition">
                         Communauté
                     </div>
                 </label>
                 <label class="group relative cursor-pointer">
-                    <input type="radio" name="type_detenteur" value="autre" class="peer sr-only">
+                    <input type="radio" name="type_detenteur" value="autre" class="peer sr-only" x-model="typeDetenteur">
                     <div class="rounded-xl border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 group-hover:border-indigo-300 peer-checked:border-indigo-600 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 transition">
                         Autre
                     </div>
@@ -54,7 +54,9 @@
 
             {{-- Autre --}}
             <input type="text" name="autre_type_detenteur" placeholder="Préciser si autre"
-                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 mb-4 hidden" id="autre-field">
+                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 mb-4"
+                   x-show="typeDetenteur === 'autre'" x-cloak
+                   :required="typeDetenteur === 'autre'">
 
             {{-- Photo --}}
             <div>
@@ -62,12 +64,38 @@
                 <input type="file" name="photo" class="block w-full border border-dashed border-gray-300 rounded-xl p-4 text-gray-600 hover:border-indigo-300 focus:border-indigo-400 focus:outline-none">
             </div>
 
-            {{-- Exemple minimal : Nom, Prénom, Téléphone --}}
+            {{-- Champs individuels (individu) --}}
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4" x-show="typeDetenteur === 'individu'" x-cloak>
+                <input type="text" name="nom" placeholder="Nom" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'individu'">
+                <input type="text" name="prenom" placeholder="Prénom" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'individu'">
+                <input type="date" name="date_naissance" placeholder="Date de naissance" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'individu'">
+                <input type="text" name="lieu_naissance" placeholder="Lieu de naissance" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'individu'">
+                <div class="md:col-span-2 grid grid-cols-2 gap-3">
+                    <select name="sexe" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'individu'" x-model="sexe">
+                        <option value="">Sexe</option>
+                        <option value="M">Masculin</option>
+                        <option value="F">Féminin</option>
+                    </select>
+                    <input type="text" name="groupe_ethnique" placeholder="Groupe ethnique (optionnel)" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400">
+                </div>
+            </div>
+
+            {{-- Champs structure (famille/communauté) --}}
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4" x-show="typeDetenteur === 'famille' || typeDetenteur === 'communaute'" x-cloak>
+                <input type="text" name="nom_structure" placeholder="Nom de la structure" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'famille' || typeDetenteur === 'communaute'">
+                <input type="text" name="type_structure" placeholder="Type de structure" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'famille' || typeDetenteur === 'communaute'">
+                <input type="text" name="siege_social" placeholder="Siège social" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'famille' || typeDetenteur === 'communaute'">
+                <input type="text" name="personne_contact" placeholder="Personne de contact" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" :required="typeDetenteur === 'famille' || typeDetenteur === 'communaute'">
+            </div>
+
+            {{-- Champs communs --}}
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" name="nom" placeholder="Nom" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400">
-                <input type="text" name="prenom" placeholder="Prénom" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400">
-                <input type="text" name="telephone" placeholder="Téléphone" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400">
-                <input type="text" name="localite_exercice" placeholder="Localité d'exercice" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 md:col-span-2">
+                <input type="text" name="telephone" placeholder="Téléphone" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" required>
+                <input type="text" name="localite_exercice" placeholder="Localité d'exercice" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400" required>
+                <input type="email" name="email" placeholder="Email (optionnel)" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400">
+                <input type="text" name="adresse" placeholder="Adresse (optionnel)" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400">
+                <input type="text" name="profession" placeholder="Profession (optionnel)" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400">
+                <input type="text" name="coordonnees_gps" placeholder="Coordonnées GPS (optionnel)" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400">
             </div>
         </div>
 
@@ -136,15 +164,4 @@
 
 {{-- Alpine.js CDN (léger pour interactions) --}}
 <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-{{-- Script pour afficher champ "autre" --}}
-<script>
-    const radios = document.querySelectorAll('input[name="type_detenteur"]');
-    radios.forEach(r => r.addEventListener('change', function() {
-        document.getElementById('autre-field').classList.add('hidden');
-        if (this.value === 'autre') {
-            document.getElementById('autre-field').classList.remove('hidden');
-        }
-    }));
-</script>
 @endsection
