@@ -1,0 +1,5 @@
+*
+!.gitignore
+!photos/
+!photos/*
+!*.{png,jpg,jpeg,gif,svg}
