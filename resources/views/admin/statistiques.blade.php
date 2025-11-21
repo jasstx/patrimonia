@@ -6,14 +6,14 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     :root {
         --primary:#3b82f6; --secondary:#f97316; --success:#10b981; --warning:#f59e0b;
-        --danger:#ef4444; --dark:#0f172a; --light:#f8fafc; --gray:#94a3b8;
+            --danger:#ef4444; --dark:#0f172a; --light:#f8fafc; --gray:#94a3b8;
         --indigo:#6366f1; --purple:#8b5cf6;
     }
     body .page-bg {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        background: #ffffff;
         min-height:100vh;
         padding:1.5rem 1rem;
-        color:#e2e8f0;
+        color:#0f172a;
     }
     .container-max { max-width:1800px; margin:0 auto; }
     .top-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; gap:1rem; flex-wrap:wrap; }

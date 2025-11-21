@@ -34,7 +34,7 @@
             }
         </style>
         <div class="sidebar-header">
-            <h5 class="mb-0">Menu</h5>
+            <h5 class="mb-0">TABLEAU DE BORD</h5>
         </div>
         <ul class="nav flex-column">
             @guest
